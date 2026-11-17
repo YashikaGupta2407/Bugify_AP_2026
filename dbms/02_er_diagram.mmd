@@ -1,0 +1,104 @@
+erDiagram
+
+    User ||--o{ Submission : "submits code"
+    User ||--|| UserProgress : "has progress counters"
+    User ||--o{ ExtensionDebugSession : "runs editor diagnostics"
+
+    Problem ||--o{ TestCase : "defines test cases"
+    Problem o|--o{ Submission : "is attempted by"
+
+    Language ||--o{ Submission : "is used by"
+
+    Submission ||--o| SubmissionResult : "produces"
+    SubmissionResult ||--o| DebuggingExplanation : "is explained by"
+
+    User {
+        int id PK
+        string name
+        string email UK
+        string password
+        datetime createdAt
+    }
+
+    Problem {
+        int id PK
+        string title
+        string description
+        string difficulty
+        datetime createdAt
+    }
+
+    Language {
+        int id PK
+        string name UK
+        string version
+    }
+
+    Submission {
+        int id PK
+        int userId FK
+        int problemId FK
+        int languageId FK
+        string code
+        datetime createdAt
+    }
+
+    SubmissionResult {
+        int id PK
+        int submissionId FK
+        string status
+        string errorType
+        string errorMessage
+        string output
+        float executionTime
+        float memory
+        string stderr
+        string compileOutput
+        datetime createdAt
+    }
+
+    DebuggingExplanation {
+        int id PK
+        int submissionResultId FK
+        string summary
+        string cause
+        string location
+        string explanation
+        string suggestion
+        string correctedCode
+        datetime createdAt
+    }
+
+    TestCase {
+        int id PK
+        int problemId FK
+        string input
+        string expectedOutput
+    }
+
+    UserProgress {
+        int id PK
+        int userId FK
+        int totalSubmissions
+        int successfulSubmissions
+        int failedSubmissions
+        datetime updatedAt
+    }
+
+    ExtensionDebugSession {
+        int id PK
+        int userId FK
+        string workspaceName
+        string filePath
+        string language
+        string errorType
+        string errorMessage
+        string diagnosticCode
+        string diagnosticSource
+        int line
+        string severity
+        string analysisSource
+        json aiExplanation
+        boolean resolved
+        datetime createdAt
+    }
